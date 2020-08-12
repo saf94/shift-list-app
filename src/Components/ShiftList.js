@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import Shift from "./Shift";
 import { getShiftData } from "../api/shiftApi";
 import { locum } from "../userConfig/user";
 
 const ShiftList = () => {
-    const shiftData = useFormattedShiftData();
-    return shiftData.map((shift) => <div>{shift.practiceName}</div>);
-};
-
-const useFormattedShiftData = () => {
     const [shiftData, setShiftData] = useState([]);
     useEffect(() => {
         const getApiData = async () => {
@@ -22,7 +18,11 @@ const useFormattedShiftData = () => {
         getApiData();
     }, []);
 
-    return shiftData;
+    return shiftData.length > 0 ? (
+        shiftData.map((shift) => <Shift key={shift.practiceName} {...shift} />)
+    ) : (
+        <div>No shifts available</div>
+    );
 };
 
 const formatShiftData = (shift) => {
